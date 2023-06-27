@@ -6,4 +6,7 @@ from app.core.db import Base
 class Salary(Base):
     salary = Column(Integer)
     date_of_raising = Column(DateTime)
-    # user = Column(Integer, ForeignKey)
+    user = Column(
+        Integer,
+        ForeignKey('user.id')
+    )

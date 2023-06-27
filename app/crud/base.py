@@ -2,6 +2,8 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.models.user import User
+
 
 class CRUDBase:
 
@@ -64,3 +66,15 @@ class CRUDBase:
         await session.delete(db_obj)
         await session.commit()
         return db_obj
+
+    async def get_user(
+            self,
+            user_id: int,
+            session: AsyncSession
+    ):
+        user = await session.execute(
+            select(User).where(
+                User.id == user_id
+            )
+        )
+        return user.scalars().first()

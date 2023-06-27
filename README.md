@@ -1,15 +1,57 @@
-# salary_viewer
-FastAPI service to check current salary
-
-установлена база данных на основе SQLite, для установки другой
-необходимо вместо aiosqlite установить другой драйвер
-
-Инициация Alembic:
-в корневой дирректории выполнить команду:
-alembic init --template async alembic - Создает папку Alembic, если есть, то не надо?
-
-В файле .env добавить переменную DATABASE_URL=sqlite+aiosqlite:///./fastapi.db
-
-все модели импортируем через core/base.py
+# SALARY_VIEWER
+#### Описание
+REST сервис просмотра текущей зарплаты и даты ее повышения.
+#### Технологии
+- Python 3.10
+- FastAPI 0.97
+- SQLAlchemy 1.4.36
+- aiosqlite 0.19.0
+#### Запуск проекта в dev-режиме
+- Клонируйте репозиторий https://github.com/ChukSerg/salary_viewer с помощью команды
+````
+git clone
+````
+- Перейдите в папку проекта
+- Установите и активируйте виртуальное окружение
+- Установите зависимости из файла requirements.txt с помощью команды
+````
+pip install -r requirements.txt
+````
+В корневом каталоге создайте файл .env, в котором пропишите следующие переменные
+```
+DATABASE_URL=sqlite+aiosqlite:///./fastapi.db  (Для SQLite)
+SECRET=Sinchrophazatron (добавьте свое секретное слово)
+```
+В корневом каталоге выполните последовательно команды
+```
 alembic revision --autogenerate -m "First migration"
-alembic upgrade head 
+alembic upgrade head
+```
+Выполните запуск приложения с помощью команды
+```
+uvicorn app.main:app --reload
+```
+Откройте в браузере страницу 
+```
+http://127.0.0.1:8000/docs
+```
+Через раздел /auth/register создайте пользователя с обязательными полями email и password:
+````
+{
+  "email": "user@example.com",
+  "password": "string"
+}
+````
+Через стороннюю программу (например, DBeaver) у созданного пользователя измените поле "is_superuser" на True.
+Зарегистрируйтесь на странице. 
+- - - - 
+#### Примеры запросов
+###### Для аутентифицированных пользователей:
+- Получение зарплаты и даты изменения: GET /salary/my
+###### Только для суперюзера:
+- Создание зарплаты: POST /salary/
+- Просмотр введенных зарплат: GET /salary/
+- Просмотр зарегистрированных пользователей: GET /salary/users
+- Удаление зарплаты по id пользователя: DELETE /salary/{user_id}/
+### Авторы
+Сергей Чукин
